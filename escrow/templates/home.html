@@ -1,0 +1,318 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css'%}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&family=Oxygen:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="dextop-view">
+
+        <!-- =============nav-part start=============== -->
+        <nav>
+            <div class="container">
+                <div class="main">
+                    <div class="left">
+                        <h4>escrow</h4>
+                    </div>
+                    <div class="right">
+                        <a class="bttn ast" href="{% url 'signup' %}">Signup</a>
+                        <a class="bttn" href="{% url 'login' %}">Login</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+
+
+        <!-- =============banner-part start=============== -->
+        <section id="banner-part">
+            <div class="overlay">
+                <div class="container">
+                    <div class="main">
+                        <div class="left">
+                            <div class="text">
+                                <h3>We are building an ecosystem</h3>
+                                <p>We are building an ecosystem to solve difficulty in transactions for freelancers</p>
+                            </div>
+                            <div class="box">
+                                <h4>
+                                    Try the demo out <span class="symbol"><img src="{% static 'images/Arrow1.png'%}"
+                                            alt="Arrow"></span>
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="item2">
+                                <div class="image1">
+                                    <img src="{% static 'images/Ellipse 1.png'%}" alt="Ellipse">
+                                </div>
+
+                                <div class="image2">
+                                    <img src="{% static 'images/Ellipse 2.png'%}" alt="Ellipse">
+                                </div>
+                                <div class="image3">
+                                    <img src="{% static 'images/Ellipse 3.png '%}" alt="Ellipse">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =============low-part start=============== -->
+        <section id="low-part">
+
+            <div class="secimg">
+                <img src="{% static 'images/section Vector.png '%}" alt="section vector">
+            </div>
+
+            <div class="container">
+                <div class="title">
+                    <h4>We are building an ecosystem to solve difficulty in transactions for freelancers</h4>
+                </div>
+                <div class="main">
+                    <div class="common">
+                        <div class="item">
+                            <div class="image">
+                                <img src="{% static 'images/fxemoji_rocket.png '%}" alt="fxemoji_rocket">
+                            </div>
+                            <h4>Transactions are fast</h4>
+                            <p>We partnered with your favourite payment providers, so yes we are pretty fast!</p>
+                        </div>
+                    </div>
+                    <div class="common">
+                        <div class="item">
+                            <div class="image">
+                                <img src="{% static 'images/Vector.png '%}" alt="Vector">
+                            </div>
+                            <h4>Low fees</h4>
+                            <p>We offer the lowest fees for escrow transactions.</p>
+                        </div>
+                    </div>
+                    <div class="common">
+                        <div class="item">
+                            <div class="image">
+                                <img src="{% static 'images/Vector(3).png '%}" alt="vector 3">
+                            </div>
+                            <h4>Secure</h4>
+                            <p>We offer the lowest fees for escrow transactions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="secimg2">
+                <img src="{% static 'images/section Vector 2.png'%}" alt="section vector">
+            </div>
+        </section>
+
+        <!-- =============footer-part start=============== -->
+        <section id="footer-part">
+            <div class="secimg3">
+                <img src="{% static 'images/section Vector 3.png'%}" alt="section vector">
+            </div>
+            <div class="container">
+                <div class="main">
+                    <div class="left">
+                        <div class="text">
+                            <p>Navara Limited is a company registered in England and Wales (No. 09446231). Navara Ltd is authorised by the Prudential Regulation Authority (PRA) and regulated by the Financial Conduct Authority and the PRA. Our Financial Services
+                                Register number is 730427. </p>
+                        </div>
+                    </div>
+                    <div class="middle">
+                        <div class="text">
+                            <a href="#">
+                                <p>Privacy policy</p>
+                            </a>
+                            <a href="#">
+                                <p>Careers</p>
+                            </a>
+                            <a href="#">
+                                <p>Terms</p>
+                            </a>
+                            <a href="#">
+                                <p>Terms</p>
+                            </a>
+                            <!-- <p>Privacy policy</p>
+                <p>Careers</p>
+                <p>Terms</p>
+                <p>Terms</p> -->
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="text">
+                            <a href="#">
+                                <p>Products</p>
+                            </a>
+                            <a href="#">
+                                <p>About us</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="fom">
+                    <form action="">
+                        <div class="search">
+                            <input type="text" placeholder="Get more insights">
+                            <div class="subscribes">
+                                <a href="#">Subscribe</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+
+    <!-- ====mobile-view=====-->
+    <div class="mobile-view">
+
+        <!-- =============nav-part html start============ -->
+        <section class="nav">
+            <p>escrow</p>
+            <div class="sub_main">
+
+                <nav class="mobile-nav-wrap" role="navigation">
+                    <ul class="mobile-header-nav">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Team</a></li>
+                        <li><a href="#">Protfolio</a></li>
+                        <li><a href="#">Perspectives</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+
+                <a class="mobile-menu-toggle js-toggle-menu hamburger-menu" href="#">
+                    <p>Menu</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- =============banner-part html start============ -->
+        <section id="banner-part">
+            <div class="overlay">
+                <div class="item">
+                    <div class="text">
+                        <h3>We are building an ecosystem</h3>
+                        <p>We are building an ecosystem to solve difficulty in transactions for freelancers</p>
+                    </div>
+                    <div class="red">
+                        <div class="image1">
+                            <img src="{% static 'images/polygon 2.png'%}" alt="polygon">
+                        </div>
+                        <div class="image2">
+                            <img src="{% static 'images/polygon 3.png'%}" alt="polygon">
+                        </div>
+                        <div class="image3">
+                            <img src="{% static 'images/polygon 5.png'%}" alt="polygon">
+                        </div>
+                        <div class="image4">
+                            <img src="{% static 'images/polygon 6.png'%}" alt="polygon">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =============low-part html start============ -->
+        <section id="low-part">
+            <div class="first">
+                <div class="box">
+                    <h4>
+                        Try the demo out<span class="symbol2"> <img src="{% static 'js/script.js '%}""images/Arrow 2.png" alt="Arrow"></span>
+                    </h4>
+                </div>
+            </div>
+            <div class="title">
+                <h4>We are building an ecosystem to solve difficulty in transactions for freelancers</h4>
+            </div>
+            <div class="one">
+                <div class="item">
+                    <div class="image">
+                        <img src="{% static 'images/fxemoji_rocket.png'%}" alt="fxemoji_rocket">
+                    </div>
+                    <h4>Transactions are fast</h4>
+                    <p>We partnered with your favourite payment providers, so yes we are pretty fast!</p>
+                </div>
+            </div>
+            <div class="one">
+                <div class="item">
+                    <div class="image">
+                        <img src="{% static 'images/Vector.png'%}" alt="Vector">
+                    </div>
+                    <h4>Low fees</h4>
+                    <p>We offer the lowest fees for escrow transactions.</p>
+                </div>
+            </div>
+            <div class="one">
+                <div class="item">
+                    <div class="image">
+                        <img src="{% static 'images/Vector(3).png '%}" alt="vector 3">
+                    </div>
+                    <h4>Secure</h4>
+                    <p>We offer the lowest fees for escrow transactions.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- =============footer-part html start============ -->
+        <section id="footer-part">
+            <div class="up">
+                <div class="text">
+                    <p>Navara Limited is a company registered in England and Wales (No. 09446231). Navara Ltd is authorised by the Prudential Regulation Authority (PRA) and regulated by the Financial Conduct Authority and the PRA. Our Financial Services
+                        Register number is 730427. </p>
+                </div>
+            </div>
+            <div class="down">
+                <div class="itemm">
+                    <div class="textt">
+                        <p>Privacy policy</p>
+                        <p>Careers</p>
+                        <p>Terms</p>
+                        <p>Terms</p>
+                    </div>
+                </div>
+                <div class="itemm2">
+                    <div class="textt">
+                        <p>Products</p>
+                        <p>About us</p>
+                    </div>
+                </div>
+            </div>
+            <div class="fom">
+                <form action="">
+                    <div class="search">
+                        <input type="text" placeholder="Get more insights">
+                        <div class="subscribes">
+                            <a href="#">Subscribe</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </section>
+    </div>
+
+
+    <script src="{% static 'js/jquery-1.12.4.min.js '%}"></script>
+    <script src="{% static 'js/script.js '%}"></script>
+
+</body>
+
+</html>

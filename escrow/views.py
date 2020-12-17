@@ -1,4 +1,4 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate,logout
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_text
@@ -77,7 +77,9 @@ def signup_view(request):
 
 
 def login_view(request):
+    
     if request.method == 'POST':
+        
         email = request.POST['email']
         password = request.POST['Password']
     
@@ -96,3 +98,8 @@ def login_view(request):
         context = {}
 
         return render(request, 'login.html', context)       
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('homepage')

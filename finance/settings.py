@@ -32,7 +32,7 @@ SECRET_KEY = 'tx-4a-qq$mvjjbguqe9fo794)7s^*+qoz@yqvg0v)e#=c=m&e8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -134,3 +134,6 @@ LOGOUT_REDIRECT_URL = 'home'
 
 STATIC_URL = '/static/'
 AUTH_USER_MODEL = "escrow.User"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    ]
