@@ -190,9 +190,11 @@
                 <nav class="mobile-nav-wrap" role="navigation">
                     <ul class="mobile-header-nav">
                         <li><a href="#">Home</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Team</a></li>
-                        <li><a href="#">Protfolio</a></li>
+                        <li>
+                            <a href="{% url 'login' %}">Login</a>
+                        </li>
+                        <li><a href="{% url 'signup' %}">Sign up</a></li>
+                        <li><a href="#">Portfolio</a></li>
                         <li><a href="#">Perspectives</a></li>
                         <li><a href="#">Contact</a></li>
                     </ul>

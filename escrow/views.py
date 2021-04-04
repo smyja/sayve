@@ -1,19 +1,25 @@
 from django.contrib.auth import login, authenticate,logout
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_text
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.utils.http import urlsafe_base64_decode
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_text,force_bytes
+from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
 from .tokens import account_activation_token
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
+from .models import wallet,Profile,User
 from .forms import SignUpForm
 from .tokens import account_activation_token
+from django.conf import settings
+from django.http import HttpResponse
+from django.http.response import JsonResponse
 from django.contrib import messages
-
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+import json
+import requests
+import random
 
 def home_view(request):
     return render(request, 'home.html')
@@ -38,6 +44,17 @@ def activate(request, uidb64, token):
         # set signup_confirmation true
         user.profile.signup_confirmation = True
         user.save()
+        # url = "https://openapi.rubiesbank.io/v1/createvirtualaccount"
+
+        # payload = "{\n    \"virtualaccountname\": \"Merchant name\",\n    \"amount\": \"1\",\n    \"amountcontrol\": \"VARIABLEAMOUNT\",\n    \"daysactive\": 0,\n    \"minutesactive\": 30,\n    \"callbackurl\": \"https://enxned596fssr.x.pipedream.net\",\n    \"singleuse\":\"N\"\n}"
+        # headers = {
+        # 'Authorization': 'settings.RUBIES',
+        # 'Content-Type': 'application/json'
+        # }
+
+        # response = requests.request("POST", url, headers=headers, data=payload)
+        # d = json.loads(response.text)
+        
         login(request, user)
         return redirect('home')
     else:
@@ -103,3 +120,46 @@ def login_view(request):
 def logout_user(request):
     logout(request)
     return redirect('homepage')
+
+
+
+ 
+@require_http_methods(["GET","POST"])
+@csrf_exempt
+def webhook(request,slug,id):
+    profile = Profile.objects.get(user_id=id)
+    data = json.loads(request.body)
+    print(data)
+    return HttpResponse()
+
+
+
+def verifybvn(request):
+    if request.method == 'POST':
+        trap = request.POST.get('verify')
+        print(trap)
+        # referenceNo = random.randint(10000, 99999)
+        # referencenum = "NAV" + str(referenceNo)
+        # print(referencenum)
+        # url = "https://openapi.rubiesbank.io/v1/verifybvn"
+
+        # payload = {"bvn":trap,"reference":referencenum}
+        # headers = {
+        # 'Authorization':settings.RUBIES
+        # 
+        # response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
+        vbvn = json.loads(response.text)
+        print(vbvn)
+   
+        virtual_user = User()
+        virtual_user.first_name=vaccount["v"]
+        virtual_profile = Profile()        
+
+             
+        return redirect('dashboard')
+
+
+    return render(request, 'verify.html') 
+    
+    
+

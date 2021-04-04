@@ -27,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'tx-4a-qq$mvjjbguqe9fo794)7s^*+qoz@yqvg0v)e#=c=m&e8'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -127,6 +127,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+RUBIES =env('RUBIES')
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 # Static files (CSS, JavaScript, Images)

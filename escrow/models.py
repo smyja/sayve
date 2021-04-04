@@ -6,6 +6,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
+from django.utils.text import slugify
+
 
 class UserManager(BaseUserManager):
     """
@@ -60,7 +62,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, null=True, max_length=64)
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
-
+    middle_name = models.CharField(max_length=64,null=True)
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
@@ -85,6 +87,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.email
+    
+    @property
+    def full_name(self):
+        """
+        Returns the first_name plus the last_name and middle_name, with a space in between.
+        """
+        full_name = '%s %s %s' % (self.first_name, self.last_name, self.middle_name)
+        return full_name.strip()
 
 
 GENDER_CATEGORY = (
@@ -100,10 +110,17 @@ class Profile(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
     gender = models.CharField(choices=GENDER_CATEGORY,max_length=2)
     signup_confirmation = models.BooleanField(default=False)
+    slug = models.SlugField(max_length=200, null=True)
+    phone_number=models.CharField(max_length=160,null=True,blank=True)
 
 
     def __str__(self):
         return self.user.email
+
+    def save(self, *args, **kw):
+
+        self.slug = slugify(f"{self.user.last_name}-{self.user.first_name}")
+        super(Profile, self).save(*args, **kw)
 
 @receiver(post_save, sender=User)
 def update_profile_signal(sender, instance, created, **kwargs):
@@ -113,8 +130,31 @@ def update_profile_signal(sender, instance, created, **kwargs):
 
 
 class wallet(models.Model):
+    owner=models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='owner', null=True)
     account_number = models.IntegerField()
-    balance = models.IntegerField()
+    balance = models.IntegerField(default=0)
     
     def __str__(self):
         return f"{self.account_number}"
+
+class MoneyDeposit(models.Model):
+    wallet= models.ForeignKey(wallet, on_delete=models.CASCADE, related_name='fundreceiver', null=True)
+    bank_name = models.CharField(max_length=150, default=None)
+    payment_reference= models.CharField(max_length=150, default=None)
+    orginator_name= models.CharField(max_length=300, default=None)
+    amount = models.PositiveIntegerField(default=0)
+    
+    created_at=models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.wallet}-{self.payment_reference}"
+
+class Verification(models.Model):
+    reference = models.CharField(max_length=150, default=None)
+    bvn = models.IntegerField()
+    owner=models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='bvnowner', null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.bvn}"
