@@ -1,3 +1,5 @@
+import os
+from decouple import config
 from django.contrib.auth import login, authenticate,logout
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.contrib.sites.shortcuts import get_current_site
@@ -17,6 +19,8 @@ from django.http.response import JsonResponse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
+from buycoins import Wallet
 import json
 import requests
 import random
@@ -119,7 +123,7 @@ def login_view(request):
 
 def logout_user(request):
     logout(request)
-    return redirect('homepage')
+    return redirect('home')
 
 
 
@@ -133,7 +137,13 @@ def webhook(request,slug,id):
     return HttpResponse()
 
 
+def addbank(request):
+    profile = Profile.objects.get(user_id=id)
+    wallet_model = wallet()
+    print(data)
+    return render(request, 'addbank.html')
 
+@login_required(login_url='/login/')
 def verifybvn(request):
     if request.method == 'POST':
         trap = request.POST.get('verify')
@@ -148,12 +158,25 @@ def verifybvn(request):
         # 'Authorization':settings.RUBIES
         # 
         # response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
-        vbvn = json.loads(response.text)
-        print(vbvn)
+        # vbvn = json.loads(response.text)
+        # print(vbvn)
    
-        virtual_user = User()
-        virtual_user.first_name=vaccount["v"]
-        virtual_profile = Profile()        
+        virtual_user = request.user
+        # virtual_user.first_name=vaccount["v"]
+        virtual_profile = Profile()
+      
+        null=None
+        jade={"status":"success","message":"BVN-DETAILS","data":{"bvn":"22462625452","first_name":"MARO","middle_name":"TOSHUA","last_name":"AKPOBI","date_of_birth":"10-Jan-2000","phone_number":"09059628124","registration_date":"","enrollment_bank":"","enrollment_branch":"","image_base_64":null,"address":null,"gender":"","email":null,"watch_listed":null,"nationality":"","marital_status":null,"state_of_residence":null,"lga_of_residence":null,"image":null}}
+        if (jade["status"])=="success":
+            print("We're on track")
+            virtual_user.first_name = (jade["data"])["first_name"]
+            virtual_user.profile.phone_number=(jade["data"])["phone_number"]
+            virtual_user.middle_name =(jade["data"])["middle_name"]
+            virtual_user.last_name =(jade["data"])["last_name"]
+            virtual_user.save()
+            
+        else:
+            return HttpResponse("Bvn number is invalid")                
 
              
         return redirect('dashboard')
@@ -161,5 +184,16 @@ def verifybvn(request):
 
     return render(request, 'verify.html') 
     
-    
+def buycoins(request):
+   
+  
+    auth_key = config("auth_key")
+    wallet = Wallet()
+    print(wallet)
+    usd_coin_address = wallet.create_address(currency="litecoin")
+    print(usd_coin_address)
+    balances = wallet.get_balances()
+    print(balances)
+   
+    return HttpResponse()   
 

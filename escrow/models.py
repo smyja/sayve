@@ -60,8 +60,8 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, null=True, max_length=64)
-    first_name = models.CharField(max_length=64)
-    last_name = models.CharField(max_length=64)
+    first_name = models.CharField(max_length=64, null=True)
+    last_name = models.CharField(max_length=64, null=True)
     middle_name = models.CharField(max_length=64,null=True)
     is_staff = models.BooleanField(
         _('staff status'),
@@ -80,7 +80,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self):
-        return self.email
+        if self.email==None:
+            return "ERROR,User has no email"
+        return self.email.__str__()
 
     def get_full_name(self):
         return self.email
@@ -94,6 +96,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         Returns the first_name plus the last_name and middle_name, with a space in between.
         """
         full_name = '%s %s %s' % (self.first_name, self.last_name, self.middle_name)
+
         return full_name.strip()
 
 
@@ -103,7 +106,8 @@ GENDER_CATEGORY = (
     ('M','Male')
                     )
 class Profile(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    username=models.CharField(max_length=160,blank=True)
     bio = models.CharField(max_length=160,null=True,blank=True)
     location = models.CharField(max_length=30,null=True,blank=True)
     birth_date = models.DateField(null=True,blank=True)
@@ -131,8 +135,17 @@ def update_profile_signal(sender, instance, created, **kwargs):
 
 class wallet(models.Model):
     owner=models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='owner', null=True)
-    account_number = models.IntegerField()
+    account_number = models.IntegerField() #deposit or withdrawal wallet
     balance = models.IntegerField(default=0)
+    virtualwallet = models.IntegerField(blank=True,null=True)
+    is_active = models.BooleanField(
+        _('active'),
+        default=False,
+        help_text=_(
+            'Designates whether this wallet should be treated as active. '
+            'Unselect this instead of deleting accounts.'
+        ),
+    )
     
     def __str__(self):
         return f"{self.account_number}"
