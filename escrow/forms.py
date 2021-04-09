@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import Group
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-
+from . import models
 from .models import User
 
 
@@ -96,3 +96,11 @@ class UserChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
+class TransferForm (forms.ModelForm):
+    class Meta:
+        model = models.sendcoin
+        fields = [
+            "sender",
+            "receiver", 
+            "amount"
+        ]

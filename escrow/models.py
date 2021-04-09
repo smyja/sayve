@@ -2,11 +2,12 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.db.models.signals import post_save,post_delete,pre_save
+from django.dispatch import receiver,Signal
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.utils.text import slugify
+from django.db.models import Sum
 
 
 class UserManager(BaseUserManager):
@@ -136,7 +137,7 @@ def update_profile_signal(sender, instance, created, **kwargs):
 class wallet(models.Model):
     owner=models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='owner', null=True)
     account_number = models.IntegerField() #deposit or withdrawal wallet
-    balance = models.IntegerField(default=0)
+    balance = models.DecimalField(default=0.00,decimal_places=2,max_digits=15)
     virtualwallet = models.IntegerField(blank=True,null=True)
     is_active = models.BooleanField(
         _('active'),
@@ -148,7 +149,7 @@ class wallet(models.Model):
     )
     
     def __str__(self):
-        return f"{self.account_number}"
+        return f"{self.virtualwallet}-{self.owner}"
 
 class MoneyDeposit(models.Model):
     wallet= models.ForeignKey(wallet, on_delete=models.CASCADE, related_name='fundreceiver', null=True)
@@ -171,3 +172,44 @@ class Verification(models.Model):
     
     def __str__(self):
         return f"{self.bvn}"
+
+class sendcoin(models.Model):
+    receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
+    wallet = models.ForeignKey(wallet, on_delete=models.CASCADE, related_name='walll', null=True)
+    
+    sender = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='xender', null=True)
+    amount = models.DecimalField(max_digits=15,decimal_places=2)
+    created_at=models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.sender}"
+
+
+
+@receiver([pre_save,post_delete], sender=sendcoin)
+def pre_save_sendcoins(sender, instance, **kwargs):
+    reseiver = instance.receiver
+    xendeer =instance.sender
+    xendee = Profile.objects.filter(user=instance.sender.user)
+    reseive = Profile.objects.filter(user=instance.receiver.user)
+    xendeer = wallet.objects.filter(owner=xendee[0])[0]
+    reseiver= wallet.objects.filter(owner=reseive[0])[0]
+    xendeer_bal = xendeer.balance - instance.amount
+    reseiveer_balance = reseiver.balance + instance.amount
+    print(xendeer.balance)
+    print(reseive)
+    print(reseiver.balance)
+    xendeer.balance = xendeer_bal
+    reseiver.balance = reseiveer_balance
+    xendeer.save()
+    reseiver.save()
+ 
+    
+  
+    
+
+    # wallet.balance = total
+    # wallet.save(update_fields=['balance'])
+    # sca.save()
+    # waller_receiver.save()
+

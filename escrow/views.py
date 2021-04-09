@@ -10,8 +10,8 @@ from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
 from .tokens import account_activation_token
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
-from .models import wallet,Profile,User
-from .forms import SignUpForm
+from .models import wallet,Profile,User,sendcoin
+from .forms import SignUpForm,TransferForm
 from .tokens import account_activation_token
 from django.conf import settings
 from django.http import HttpResponse
@@ -197,3 +197,35 @@ def buycoins(request):
    
     return HttpResponse()   
 
+def transfer(request):
+    if request.method == "POST":
+        form = forms.TransferForm(request.POST)
+        if form.is_valid():
+            form.save()
+            
+            profile = Profile.objects.get(user=request.user)
+            
+            sender = models.sendcoins.objects.get(sender=request.user)
+            receiver = sender.receiver
+            profile2= Profile.objects.get(username=receiver)
+
+            temp = sender # NOTE: Delete this instance once money transfer is done
+            
+            receiver = models.wallet.objects.get(owner=profile2) # FIELD 1
+            transfer_amount = sender.amount # FIELD 2
+            sender = models.wallet.objects.get(owner=profile) # FIELD 3
+
+            # Now transfer the money!
+            sender.balance = sender.balance - transfer_amount
+            receiver.balance = receiver.balance + transfer_amount
+
+            # Save the changes before redirecting
+            sender.save()
+            receiver.save()
+
+            temp.delete() # NOTE: Now deleting the instance for future money transactions
+
+        return HttpResponse('Successful')
+    else:
+        form = forms.MoneyTransferForm()
+    return render(request, "profiles/money_transfer.html", {"form": form})

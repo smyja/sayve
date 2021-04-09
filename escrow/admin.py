@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserCreationForm, UserChangeForm
-from .models import Profile, wallet,MoneyDeposit,Verification
+from .models import Profile, wallet,MoneyDeposit,Verification,sendcoin
 
 from .models import User
 # Regis
@@ -9,6 +9,7 @@ admin.site.register(Profile)
 admin.site.register(wallet)
 admin.site.register(MoneyDeposit)
 admin.site.register(Verification)
+admin.site.register(sendcoin)
 
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances

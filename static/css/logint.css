@@ -54,7 +54,8 @@
                                                     margin-bottom: 1.5625rem;
                                                 }
                                                 
-                                                input[type="number"] {
+                                                input[type="number"],
+                                                input[type="text"] {
                                                     outline: none;
                                                     background: #fff;
                                                     border: 1px solid #d7dfe6;
