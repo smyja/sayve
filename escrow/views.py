@@ -24,6 +24,8 @@ from buycoins import Wallet
 import json
 import requests
 import random
+import decimal
+
 
 def home_view(request):
     return render(request, 'home.html')
@@ -198,34 +200,42 @@ def buycoins(request):
     return HttpResponse()   
 
 def transfer(request):
+    profile = Profile.objects.get(user=request.user)
+
+    print(profile.username)
+    
     if request.method == "POST":
-        form = forms.TransferForm(request.POST)
+        form = TransferForm(request.POST)
+    
         if form.is_valid():
+            print(form)
             form.save()
             
-            profile = Profile.objects.get(user=request.user)
+            trap = request.POST.get('receiver')
             
-            sender = models.sendcoins.objects.get(sender=request.user)
-            receiver = sender.receiver
-            profile2= Profile.objects.get(username=receiver)
-
-            temp = sender # NOTE: Delete this instance once money transfer is done
+            profile2 = Profile.objects.get(username=trap)
+            sender = wallet.objects.get(owner=profile)
             
-            receiver = models.wallet.objects.get(owner=profile2) # FIELD 1
-            transfer_amount = sender.amount # FIELD 2
-            sender = models.wallet.objects.get(owner=profile) # FIELD 3
+    
+            
+            receiver = wallet.objects.get(owner=profile2)  # FIELD 1
+            print(receiver)
+            trx= request.POST.get('amount')
+            transfer_amount = trx # FIELD 2
+             # FIELD 3
+            print(sender.balance)
 
             # Now transfer the money!
-            sender.balance = sender.balance - transfer_amount
-            receiver.balance = receiver.balance + transfer_amount
+            sender.balance = sender.balance - decimal.Decimal(float(transfer_amount))
+            receiver.balance = receiver.balance + decimal.Decimal(float(transfer_amount))
 
             # Save the changes before redirecting
-            sender.save()
-            receiver.save()
 
-            temp.delete() # NOTE: Now deleting the instance for future money transactions
+            return(HttpResponse("Money has been transferred boss!")) 
+          #NOTE: Now deleting the instance for future money transactions
+        else:
+            return(HttpResponse("form is not valid"))    
 
-        return HttpResponse('Successful')
     else:
-        form = forms.MoneyTransferForm()
-    return render(request, "profiles/money_transfer.html", {"form": form})
+        form = TransferForm(initial={"sender": profile.username})
+    return render(request, "sendcoins.html", {"form": form})

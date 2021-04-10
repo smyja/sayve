@@ -17,13 +17,14 @@
 <body>
     <div class="logc">
         <h2 class="treo">Send money</h2>
-        <form method="POST" class="ar">{%csrf_token%}<input name="receiver" type="text" placeholder="Enter username">
-            <div class=""><input name="amount" type="number" placeholder="Enter Amount">
-                <div>
-                    <button class="bb" type="submit">Send funds</button><br>{% for message in messages %}
+        <form method="post" class="ar">{%csrf_token%}
+            <div class="">
+                <div>{{form.sender.as_hidden}}{{form.receiver}}{{form.amount}}
+                    <button class="bb" type="submit">Send fund</button><br>{% for message in messages %}
                     <p class="errror">{{message}}
                     </p>{% endfor %}
                     <p class="fpass">Forgot your password? <a href="/reset-password">Reset it here</a></p>
+
         </form>
         </div>
 

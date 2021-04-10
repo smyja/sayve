@@ -9,7 +9,8 @@ admin.site.register(Profile)
 admin.site.register(wallet)
 admin.site.register(MoneyDeposit)
 admin.site.register(Verification)
-admin.site.register(sendcoin)
+
+
 
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
@@ -46,3 +47,6 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 admin.site.register(User, UserAdmin)
+class sendcoinAdmin(admin.ModelAdmin):
+    readonly_fields = ('created_at',)
+admin.site.register(sendcoin,sendcoinAdmin)

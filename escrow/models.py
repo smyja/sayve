@@ -174,26 +174,24 @@ class Verification(models.Model):
         return f"{self.bvn}"
 
 class sendcoin(models.Model):
-    receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
-    wallet = models.ForeignKey(wallet, on_delete=models.CASCADE, related_name='walll', null=True)
-    
-    sender = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='xender', null=True)
+    sender =  models.CharField(max_length=150, default=None)
+    receiver = models.CharField(max_length=150, default=None)
     amount = models.DecimalField(max_digits=15,decimal_places=2)
-    created_at=models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.sender}"
+        return f"{self.sender} sent {self.amount} to {self.receiver}"
 
 
 
-@receiver([pre_save,post_delete], sender=sendcoin)
+@receiver([post_save,post_delete], sender=sendcoin)
 def pre_save_sendcoins(sender, instance, **kwargs):
     reseiver = instance.receiver
     xendeer =instance.sender
-    xendee = Profile.objects.filter(user=instance.sender.user)
-    reseive = Profile.objects.filter(user=instance.receiver.user)
-    xendeer = wallet.objects.filter(owner=xendee[0])[0]
-    reseiver= wallet.objects.filter(owner=reseive[0])[0]
+    xendee = Profile.objects.get(username=instance.sender)
+    reseive = Profile.objects.get(username=instance.receiver)
+    xendeer = wallet.objects.get(owner=xendee)
+    reseiver= wallet.objects.get(owner=reseive)
     xendeer_bal = xendeer.balance - instance.amount
     reseiveer_balance = reseiver.balance + instance.amount
     print(xendeer.balance)
