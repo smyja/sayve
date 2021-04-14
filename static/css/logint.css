@@ -226,6 +226,23 @@
                                                         input:focus {
                                                             border: 1px solid #3e7eee;
                                                         }
+                                                        select {
+                                                            outline: none;
+                                                            background: #fff;
+                                                            border: 1px solid #d7dfe6;
+                                                            border-top-color: rgb(215, 223, 230);
+                                                            border-right-color: rgb(215, 223, 230);
+                                                            border-bottom-color: rgb(215, 223, 230);
+                                                            border-left-color: rgb(215, 223, 230);
+                                                            border-radius: 3px;
+                                                            resize: none;
+                                                            display: inline-block;
+                                                            vertical-align: middle;
+                                                            width: 22.5rem;
+                                                            padding: 15px 22px;
+                                                            height: 3.125rem;
+                                                            margin-bottom: 1.5625rem;
+                                                        }
                                                         .treo {
                                                             padding-top: 150px;
                                                         }

@@ -8,7 +8,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.utils.text import slugify
 from django.db.models import Sum
-
+from django import forms
+from django.forms import ValidationError
 
 class UserManager(BaseUserManager):
     """
@@ -181,8 +182,23 @@ class sendcoin(models.Model):
 
     def __str__(self):
         return f"{self.sender} sent {self.amount} to {self.receiver}"
+    
+class Log(models.Model):
+    customer_name = models.CharField(max_length=30)
+    customer_email = models.CharField(max_length=30,blank=True)
+    status = models.CharField(max_length=10)
+    transaction_type = models.CharField(max_length=20)
+    narration = models.CharField(max_length=50,null=True,blank=True)
+    account = models.CharField(max_length=10)
+    amount = models.IntegerField()
+    currency = models.CharField(max_length=3)
+    transaction_ref = models.CharField(max_length=35,blank=True)
+    reference= models.CharField(max_length=35)
+    created_at = models.CharField(max_length=26)
 
-
+    def __str__(self):
+        return  f"{self.transaction_type}-{self.reference}"
+        
 
 @receiver([post_save,post_delete], sender=sendcoin)
 def pre_save_sendcoins(sender, instance, **kwargs):
@@ -191,7 +207,8 @@ def pre_save_sendcoins(sender, instance, **kwargs):
     xendee = Profile.objects.get(username=instance.sender)
     reseive = Profile.objects.get(username=instance.receiver)
     xendeer = wallet.objects.get(owner=xendee)
-    reseiver= wallet.objects.get(owner=reseive)
+    reseiver = wallet.objects.get(owner=reseive)
+
     xendeer_bal = xendeer.balance - instance.amount
     reseiveer_balance = reseiver.balance + instance.amount
     print(xendeer.balance)
@@ -199,8 +216,8 @@ def pre_save_sendcoins(sender, instance, **kwargs):
     print(reseiver.balance)
     xendeer.balance = xendeer_bal
     reseiver.balance = reseiveer_balance
-    xendeer.save()
-    reseiver.save()
+    # xendeer.save()
+    # reseiver.save()
  
     
   

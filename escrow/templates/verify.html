@@ -18,7 +18,35 @@
     <div class="logc">
         <h2 class="treo">Verify your bank account</h2>
         <form method="POST" class="ar">{%csrf_token%}<input name="verify" type="number" placeholder="Enter your BVN">
+            <input name="acc" type="number" placeholder="Enter your Account number">
+            <div></div>
+            <select name="bank">
+                <option selected disabled>Choose Bank</option>
+                <option value="044">Access Bank</option>
+                <option value="023"> Citibank</option>
+                <option value="050">Ecobank</option>
+                <option value="214">First City Monument Bank (FCMB)</option>
+                <option value="070">Fidelity Bank</option>
+                <option value="011">First Bank</option>
 
+                <option value="058">Guaranty Trust Bank (GTB)</option>
+                <option value="030">Heritage Bank</option>
+                <option value="301">Jaiz Bank</option>
+                <option value="082">Keystone Bank</option>
+                <option value="526">Parallex Bank</option>
+                <option value="101">Providus Bank</option>
+                <option value="221">Stanbic IBTC Bank</option>
+                <option value="076">Skye Bank</option>
+                <option value="068">Standard Chartered Bank</option>
+                <option value="232">Sterling Bank</option>
+                <option value="100">Suntrust Bank</option>
+                <option value="102"> Titan Trust Bank</option>
+                <option value="032">Union Bank</option>
+                <option value="033">United Bank for Africa (UBA)</option>
+                <option value="215">Unity Bank</option>
+                <option value="035">Wema Bank</option>
+                <option value="052">Zenith Bank</option>
+                </select>
             <button class="bb" type="submit">Verify</button><br>{% for message in messages %}
             <p class="errror">{{message}}
             </p>{% endfor %}
@@ -26,7 +54,25 @@
         </form>
     </div>
 
-
+    <style>
+        select {
+            outline: none;
+            background: #fff;
+            border: 1px solid #d7dfe6;
+            border-top-color: rgb(215, 223, 230);
+            border-right-color: rgb(215, 223, 230);
+            border-bottom-color: rgb(215, 223, 230);
+            border-left-color: rgb(215, 223, 230);
+            border-radius: 3px;
+            resize: none;
+            display: inline-block;
+            vertical-align: middle;
+            width: 22.5rem;
+            padding: 15px 22px;
+            height: 3.125rem;
+            margin-bottom: 1.5625rem;
+        }
+    </style>
 </body>
 
 </html>

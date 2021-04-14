@@ -10,7 +10,7 @@ from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
 from .tokens import account_activation_token
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
-from .models import wallet,Profile,User,sendcoin
+from .models import wallet,Profile,User,sendcoin,Log
 from .forms import SignUpForm,TransferForm
 from .tokens import account_activation_token
 from django.conf import settings
@@ -132,13 +132,23 @@ def logout_user(request):
  
 @require_http_methods(["GET","POST"])
 @csrf_exempt
-def webhook(request,slug,id):
-    profile = Profile.objects.get(user_id=id)
+def webhook(request):
+    
     data = json.loads(request.body)
     print(data)
+    if data["event.type"] == "Transfer":
+        resp = Log.objects.create(customer_name=data["transfer"]["fullname"], status=data["transfer"]["status"], transaction_type=data["event.type"], amount=data["transfer"]["amount"], account=data["transfer"]["account_number"], narration=data["transfer"]["narration"], currency=data["transfer"]["currency"], created_at=data["transfer"]["date_created"], reference=data["transfer"]["reference"])
+    else:
+        resp = Log.objects.create(customer_name=data["customer"]["fullName"], customer_email=data["customer"]["email"],status=data["status"], transaction_type=data["event.type"], amount=data["amount"], currency=data["currency"], transaction_ref=data["txRef"], flw_ref=data["flwRef"], created_at=data["customer"]["createdAt"])
+
     return HttpResponse()
 
-
+def webhook_logs(request):
+  log_object = Log.objects.all()
+  context = {
+    "data": log_object
+  }
+  return render(request, 'webhooklogs.html', context)
 def addbank(request):
     profile = Profile.objects.get(user_id=id)
     wallet_model = wallet()
@@ -149,7 +159,9 @@ def addbank(request):
 def verifybvn(request):
     if request.method == 'POST':
         trap = request.POST.get('verify')
-        print(trap)
+        acc_no = request.POST.get('acc')
+        sort_code = request.POST.get('bank')
+        print(trap,acc_no,sort_code)
         # referenceNo = random.randint(10000, 99999)
         # referencenum = "NAV" + str(referenceNo)
         # print(referencenum)
@@ -224,10 +236,17 @@ def transfer(request):
             transfer_amount = trx # FIELD 2
              # FIELD 3
             print(sender.balance)
-
+            if sender.balance < decimal.Decimal(float(transfer_amount)):
+                return (HttpResponse("Insufficient balance"))
+            else:
+                pass
             # Now transfer the money!
+        
             sender.balance = sender.balance - decimal.Decimal(float(transfer_amount))
             receiver.balance = receiver.balance + decimal.Decimal(float(transfer_amount))
+            sender.save()
+            receiver.save()
+
 
             # Save the changes before redirecting
 
